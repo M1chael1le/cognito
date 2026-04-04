@@ -144,7 +144,7 @@ export default function ChatInterface() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Mark a tax or business question..."
+            placeholder="Ask Lincoln a tax or business question..."
             className="flex-1 px-4 py-3 bg-card border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={isStreaming}
           />
