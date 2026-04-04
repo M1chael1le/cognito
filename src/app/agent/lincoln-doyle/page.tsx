@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ChatInterface from "@/components/ChatInterface";
 
-export default function MarkKohlerPage() {
+export default function LincolnDoylePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -10,7 +10,7 @@ export default function MarkKohlerPage() {
           Cognito
         </Link>
         <div className="text-center">
-          <h1 className="text-sm font-semibold text-dark">Mark J. Kohler</h1>
+          <h1 className="text-sm font-semibold text-dark">Lincoln Doyle</h1>
           <p className="text-xs text-secondary">Tax Strategist & Business Attorney</p>
         </div>
         <Link

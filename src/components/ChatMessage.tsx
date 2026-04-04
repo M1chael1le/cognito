@@ -11,7 +11,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} gap-3`}>
       {!isUser && (
         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-          <span className="text-white text-xs font-bold">MK</span>
+          <span className="text-white text-xs font-bold">LD</span>
         </div>
       )}
       <div className={`max-w-[70%]`}>

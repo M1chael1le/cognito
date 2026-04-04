@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const context = await retrieveContext(question);
   const basePrompt = getSystemPrompt();
   const expertPrompt = context
-    ? `${basePrompt}\n\n=== RELEVANT CONTEXT FROM YOUR KNOWLEDGE BASE ===\n${context}\n=== END CONTEXT ===\n\nUse the above context to inform your response when relevant, but always stay in character as Mark Kohler.`
+    ? `${basePrompt}\n\n=== RELEVANT CONTEXT FROM YOUR KNOWLEDGE BASE ===\n${context}\n=== END CONTEXT ===\n\nUse the above context to inform your response when relevant, but always stay in character as Lincoln Doyle.`
     : basePrompt;
 
   const vanillaPrompt =

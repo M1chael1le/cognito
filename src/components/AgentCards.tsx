@@ -2,11 +2,11 @@ import Link from "next/link";
 
 const agents = [
   {
-    id: "mark-kohler",
-    name: "Mark J. Kohler",
+    id: "lincoln-doyle",
+    name: "Lincoln Doyle",
     title: "Tax Strategist & Business Attorney",
     description: "25+ years of tax & legal expertise. S-Corp strategy, asset protection, retirement planning.",
-    initials: "MK",
+    initials: "LD",
     color: "bg-blue-600",
     status: "live" as const,
   },

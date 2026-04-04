@@ -99,10 +99,10 @@ export default function ChatInterface() {
           <div className="flex flex-col items-center justify-center h-full gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-2xl font-bold">MK</span>
+                <span className="text-white text-2xl font-bold">LD</span>
               </div>
               <h2 className="text-2xl font-bold text-dark mb-2">
-                Mark J. Kohler
+                Lincoln Doyle
               </h2>
               <p className="text-secondary">
                 Tax Strategist & Business Attorney
@@ -123,7 +123,7 @@ export default function ChatInterface() {
         {isStreaming && messages[messages.length - 1]?.content === "" && (
           <div className="flex gap-3">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-xs font-bold">MK</span>
+              <span className="text-white text-xs font-bold">LD</span>
             </div>
             <div className="bg-card border border-gray-200 rounded-2xl rounded-tl-md">
               <ThinkingDots />

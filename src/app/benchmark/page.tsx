@@ -5,7 +5,7 @@ import Link from "next/link";
 import ThinkingDots from "@/components/ThinkingDots";
 
 const agentOptions = [
-  { id: "mark-kohler", name: "Mark J. Kohler", title: "Tax Strategist", enabled: true },
+  { id: "lincoln-doyle", name: "Lincoln Doyle", title: "Tax Strategist", enabled: true },
   { id: "sarah-chen", name: "Sarah Chen", title: "Growth Strategist", enabled: false },
   { id: "david-park", name: "David Park", title: "Financial Advisor", enabled: false },
   { id: "rachel-torres", name: "Rachel Torres", title: "Real Estate", enabled: false },
@@ -14,7 +14,7 @@ const agentOptions = [
 ];
 
 export default function BenchmarkPage() {
-  const [selectedAgent, setSelectedAgent] = useState("mark-kohler");
+  const [selectedAgent, setSelectedAgent] = useState("lincoln-doyle");
   const [question, setQuestion] = useState("");
   const [expertText, setExpertText] = useState("");
   const [vanillaText, setVanillaText] = useState("");
