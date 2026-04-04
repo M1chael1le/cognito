@@ -2,26 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: #1A1A2E;
+  background: #ffffff;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* ===== ELLIPTICAL ORBIT ===== */
+.orbit-container {
+  position: relative;
+  width: 700px;
+  height: 360px;
+}
+
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 640px;
+  height: 300px;
+  margin-top: -150px;
+  margin-left: -320px;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* JS-driven orbit items */
+.orbit-item-js {
+  position: absolute;
+  top: calc(50% - 24px);
+  left: calc(50% - 24px);
+  width: 48px;
+  height: 48px;
+  will-change: transform;
+}
+
+/* Orbit avatar hover */
+.orbit-avatar {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.orbit-avatar:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 20px rgba(27, 105, 225, 0.3);
+}
+
+/* Orbit label underneath icon */
+.orbit-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 10px;
+  font-weight: 500;
+  color: #999;
+}
+
+/* Thinking dots animation */
+.thinking-dots span {
+  animation: blink 1.4s infinite both;
+}
+.thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+
+/* Responsive orbit */
+@media (max-width: 768px) {
+  .orbit-container {
+    width: 380px;
+    height: 240px;
+  }
+  .orbit-ring {
+    width: 340px;
+    height: 180px;
+    margin-top: -90px;
+    margin-left: -170px;
+  }
+  .orbit-item-js {
+    width: 40px;
+    height: 40px;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+  .orbit-label {
+    font-size: 8px;
   }
 }
