@@ -3,32 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_TEXT_LENGTH = 100_000;
 
+// PDFs are handled client-side; server handles DOCX, TXT, CSV
 const SUPPORTED_TYPES = [
-  "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/plain",
   "text/csv",
 ];
-
-async function extractPdfText(buffer: Buffer): Promise<string> {
-  const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
-
-  const uint8Array = new Uint8Array(buffer);
-  const doc = await pdfjsLib.getDocument({ data: uint8Array }).promise;
-
-  const textParts: string[] = [];
-  for (let i = 1; i <= doc.numPages; i++) {
-    const page = await doc.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((item: any) => item.str || "")
-      .join(" ");
-    textParts.push(pageText);
-  }
-
-  return textParts.join("\n\n");
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     if (!SUPPORTED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "Unsupported file type. Please upload PDF, DOCX, TXT, or CSV." },
+        { error: "Unsupported file type. Please upload DOCX, TXT, or CSV." },
         { status: 400 }
       );
     }
@@ -56,9 +36,7 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     let extractedText = "";
 
-    if (file.type === "application/pdf") {
-      extractedText = await extractPdfText(buffer);
-    } else if (
+    if (
       file.type ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
@@ -70,7 +48,6 @@ export async function POST(req: NextRequest) {
       extractedText = buffer.toString("utf-8");
     }
 
-    // Truncate if too long
     if (extractedText.length > MAX_TEXT_LENGTH) {
       extractedText =
         extractedText.slice(0, MAX_TEXT_LENGTH) +

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { ChatMessage as ChatMessageType, FileAttachment } from "@/types";
+import { extractPdfText } from "@/lib/pdfExtract";
 import ChatMessage from "./ChatMessage";
 import ThinkingDots from "./ThinkingDots";
 import StarterQuestions from "./StarterQuestions";
@@ -23,6 +24,20 @@ export default function ChatInterface() {
   const uploadFile = async (file: File) => {
     setUploadingCount((c) => c + 1);
     try {
+      // Handle PDFs client-side to avoid serverless issues
+      if (file.type === "application/pdf") {
+        const extractedText = await extractPdfText(file);
+        const attachment: FileAttachment = {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          extractedText: extractedText.slice(0, 100_000),
+        };
+        setPendingFiles((prev) => [...prev, attachment]);
+        return;
+      }
+
+      // Send DOCX/TXT/CSV to server for extraction
       const formData = new FormData();
       formData.append("file", file);
 
