@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_TEXT_LENGTH = 100_000;
 
-// PDFs are handled client-side; server handles DOCX, TXT, CSV
 const SUPPORTED_TYPES = [
+  "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/plain",
   "text/csv",
@@ -36,7 +36,14 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     let extractedText = "";
 
-    if (
+    if (file.type === "application/pdf") {
+      // PDFs should be handled client-side, but if they arrive here
+      // return an error directing the user to retry
+      return NextResponse.json(
+        { error: "PDF processing error. Please try again." },
+        { status: 500 }
+      );
+    } else if (
       file.type ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {

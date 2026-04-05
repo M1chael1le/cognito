@@ -25,7 +25,8 @@ export default function ChatInterface() {
     setUploadingCount((c) => c + 1);
     try {
       // Handle PDFs client-side to avoid serverless issues
-      if (file.type === "application/pdf") {
+      const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+      if (isPdf) {
         const extractedText = await extractPdfText(file);
         const attachment: FileAttachment = {
           name: file.name,
