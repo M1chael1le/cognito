@@ -10,6 +10,26 @@ const SUPPORTED_TYPES = [
   "text/csv",
 ];
 
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
+
+  const uint8Array = new Uint8Array(buffer);
+  const doc = await pdfjsLib.getDocument({ data: uint8Array }).promise;
+
+  const textParts: string[] = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((item: any) => item.str || "")
+      .join(" ");
+    textParts.push(pageText);
+  }
+
+  return textParts.join("\n\n");
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -37,10 +57,7 @@ export async function POST(req: NextRequest) {
     let extractedText = "";
 
     if (file.type === "application/pdf") {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
-      const result = await pdfParse(buffer);
-      extractedText = result.text;
+      extractedText = await extractPdfText(buffer);
     } else if (
       file.type ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -55,7 +72,9 @@ export async function POST(req: NextRequest) {
 
     // Truncate if too long
     if (extractedText.length > MAX_TEXT_LENGTH) {
-      extractedText = extractedText.slice(0, MAX_TEXT_LENGTH) + "\n\n[Document truncated due to length]";
+      extractedText =
+        extractedText.slice(0, MAX_TEXT_LENGTH) +
+        "\n\n[Document truncated due to length]";
     }
 
     return NextResponse.json({
