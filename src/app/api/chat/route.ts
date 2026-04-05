@@ -12,13 +12,27 @@ export async function POST(req: NextRequest) {
     return new Response("No user message found", { status: 400 });
   }
 
+  // Transform messages: inject attachment text into user message content
+  const transformedMessages = messages.map((msg) => {
+    if (msg.role === "user" && msg.attachments && msg.attachments.length > 0) {
+      const attachmentText = msg.attachments
+        .map(
+          (a) =>
+            `\n\n=== UPLOADED DOCUMENT: ${a.name} ===\n${a.extractedText}\n=== END DOCUMENT ===`
+        )
+        .join("");
+      return { role: msg.role, content: msg.content + attachmentText };
+    }
+    return { role: msg.role, content: msg.content };
+  });
+
   const context = await retrieveContext(lastUserMsg.content);
   const basePrompt = getSystemPrompt();
   const augmentedPrompt = context
     ? `${basePrompt}\n\n=== RELEVANT CONTEXT FROM YOUR KNOWLEDGE BASE ===\n${context}\n=== END CONTEXT ===\n\nUse the above context to inform your response when relevant, but always stay in character as Lincoln Doyle.`
     : basePrompt;
 
-  const stream = streamClaude(augmentedPrompt, messages);
+  const stream = streamClaude(augmentedPrompt, transformedMessages);
 
   const encoder = new TextEncoder();
   const readable = new ReadableStream({
